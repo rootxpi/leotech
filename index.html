@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0505" />
+<title>𝖫Ξ𝖮 — Cyber Authority</title>
+<meta name="description" content="𝖫Ξ𝖮 Cyber Authority — developer, cyber expert & mentor. Learn code, security and OSINT with authority." />
+<meta property="og:title" content="𝖫Ξ𝖮 — Cyber Authority" />
+<meta property="og:description" content="Developer · Cyber Expert · Mentor. Red-glow OSINT-grade portfolio." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52' font-family='Arial' fill='%23ff2a3d'%3E𝖫%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+<style>
+:root{
+  --bg:#0a0505; --fg:#f5f5f5; --muted:#8a7a7a;
+  --card:#150a0a;
+  --red:#ff2a3d; --red-soft:rgba(255,42,61,.35);
+  --green:#00ff41; /* Hacker Matrix Green */
+  --green-glow:rgba(0, 255, 65, 0.4);
+  --font-display:"Orbitron","Rajdhani",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+  --font-body:"Rajdhani","Inter",system-ui,sans-serif;
+}
+html.light{
+  --bg:#f7f2f2; --fg:#160b0b; --muted:#5b4444; --card:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--fg);font-family:var(--font-body);min-height:100%}
+body{overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* Desktop/Tablet/Mobile Responsive Logic */
+.app{position:relative;width:100%;max-width:600px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;z-index:10;padding-bottom:7rem}
+canvas.matrix{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;width:100vw;height:100vh}
+.vignette{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(circle at 50% 20%,rgba(255,42,61,.18),transparent 60%)}
+
+/* utils */
+.glass{
+  background:color-mix(in oklab,var(--card) 55%,transparent);
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border:1px solid rgba(255,42,61,.28);
+  box-shadow:inset 0 0 0 1px rgba(255,42,61,.1),0 8px 32px -8px rgba(255,42,61,.35);
+}
+.text-glow{ text-shadow:0 0 12px rgba(255,42,61,.7),0 0 32px rgba(255,42,61,.4)}
+.red{color:var(--red)}
+
+/* NEW GREEN UTILITIES */
+.text-green { color: var(--green) !important; text-shadow: 0 0 12px var(--green-glow) !important; }
+.border-green { border: 1px solid rgba(0, 255, 65, 0.4) !important; box-shadow: 0 0 12px -4px var(--green) !important; }
+.ico-green { border: 1px solid rgba(0, 255, 65, 0.4) !important; background: rgba(0, 255, 65, 0.1) !important; color: var(--green) !important; }
+
+.mono{font-family:var(--font-mono)}
+.display{font-family:var(--font-display);font-weight:900;letter-spacing:.02em}
+.muted{color:var(--muted)}
+.center{text-align:center}
+
+/* Scroll Reveal Animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* header */
+header{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.25rem 0}
+.brand{font-family:var(--font-display);font-size:13px;letter-spacing:.15em;color:var(--red); font-weight:700;}
+.online{display:flex;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;}
+/* GREEN DOT */
+.dot{position:relative;display:inline-block;width:6px;height:6px}
+.dot::before,.dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--green)}
+.dot::before{animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0, 255, 65, 0.7)}50%{box-shadow:0 0 0 5px rgba(0, 255, 65, 0)}}
+.iconbtn{display:grid;place-items:center;width:2.5rem;height:2.5rem;border-radius:9999px;color:var(--red)}
+
+/* ripple */
+.ripple-host{position:relative;overflow:hidden}
+.ripple{position:absolute;border-radius:9999px;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,42,61,.65) 0%,transparent 70%);
+  transform:scale(0);animation:ripple 600ms ease-out forwards}
+@keyframes ripple{to{transform:scale(3);opacity:0}}
+
+/* Interactive elements */
+button, a, .chip, .tech, .stat, .skill, .link-row, .nav-btn, .tg-btn, .iconbtn {
+  transition: all 0.3s ease !important;
+}
+
+.alive {
+  transform: translateY(-4px) scale(1.02) !important;
+  background: rgba(20, 10, 10, 0.65) !important; 
+  backdrop-filter: blur(20px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+  border-color: var(--red) !important;
+  box-shadow: 0 15px 35px -5px rgba(255, 42, 61, 0.6), inset 0 0 15px rgba(255, 42, 61, 0.25) !important;
+  transition: all 0.4s ease-out !important;
+  z-index: 50 !important;
+}
+
+/* main */
+main{flex:1}
+.tab{display:none;flex-direction:column;gap:1.5rem;padding:1rem 1.25rem 2rem;position:relative;z-index:10}
+.tab.active{display:flex}
+
+/* home */
+.badge{display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;padding:.35rem 1rem;font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;color:var(--red);align-self:center}
+.pfp-wrap{position:relative;width:14rem;height:14rem;margin:.5rem auto 0;display:grid;place-items:center}
+.corner{position:absolute;width:1.75rem;height:1.75rem;border:2px solid var(--red);box-shadow:0 0 18px var(--red)}
+.corner.tl{top:-4px;left:-4px;border-right:0;border-bottom:0;border-top-left-radius:14px}
+.corner.tr{top:-4px;right:-4px;border-left:0;border-bottom:0;border-top-right-radius:14px}
+.corner.bl{bottom:-4px;left:-4px;border-right:0;border-top:0;border-bottom-left-radius:14px}
+.corner.br{bottom:-4px;right:-4px;border-left:0;border-top:0;border-bottom-right-radius:14px}
+
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(255,42,61,.35)}
+.r1{inset:.75rem;animation:spin 22s linear infinite}
+.r2{inset:1.5rem;animation:spin 34s linear infinite reverse;border-color:rgba(0,255,255,0.4); box-shadow: 0 0 10px rgba(0,255,255,0.1);}
+.r3{inset:2.25rem;border-style:dashed;border-color:rgba(255,42,61,.5);animation:spin 22s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.pfp{position:relative;width:10rem;height:10rem;border-radius:50%;display:grid;place-items:center;
+  animation:breathe 3.2s ease-in-out infinite; overflow: hidden; background: transparent;}
+.pfp img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; z-index: 2; position: relative;}
+@keyframes breathe{
+  0%,100%{box-shadow:0 0 0 1px rgba(255,42,61,.6),0 0 30px 4px rgba(255,42,61,.45),0 0 120px 20px rgba(255,42,61,.22),inset 0 0 60px rgba(255,42,61,.35)}
+  50%{box-shadow:0 0 0 1px rgba(255,42,61,.8),0 0 50px 8px rgba(255,42,61,.6),0 0 160px 30px rgba(255,42,61,.3),inset 0 0 80px rgba(255,42,61,.45)}
+}
+.divider{height:1px;width:100%;max-width:18rem;margin:0 auto;background:linear-gradient(90deg,transparent,var(--red),transparent);box-shadow:0 0 16px var(--red)}
+.typewriter{text-align:center;font-family:var(--font-mono);font-size:.9rem}
+
+/* Hacker Green Typewriter Fix */
+#tw { color: var(--green); text-shadow: 0 0 8px var(--green-glow); }
+.caret::after{content:"▍";margin-left:2px;color:var(--green);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.chip{border-radius:9999px;padding:.35rem 1rem;font-family:var(--font-mono);font-size:.75rem;color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.stat{border-radius:1rem;padding:1rem .5rem;text-align:center}
+.stat b{display:block;font-family:var(--font-display);font-size:1.5rem;color:var(--red);text-shadow:0 0 12px rgba(255,42,61,.7)}
+.stat i{font-style:normal;display:block;margin-top:.25rem;font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;color:var(--muted)}
+
+/* about */
+h2.head{font-family:var(--font-display);font-size:1.875rem;color:var(--red);text-shadow:0 0 12px rgba(255,42,61,.7);margin-top:.25rem}
+.small-tag{font-family:var(--font-mono);font-size:.75rem;color:rgba(255,42,61,.8)}
+.card{border-radius:1rem;padding:1.25rem}
+.quote{margin-top:1rem;border-left:2px solid var(--red);padding-left:.75rem;font-family:var(--font-mono);font-style:italic;font-size:.875rem;color:rgba(255,42,61,.9)}
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-top:.75rem}
+.skill{border-radius:1rem;padding:1rem}
+.skill .ico{width:2.5rem;height:2.5rem;border-radius:.5rem;border:1px solid rgba(255,42,61,.4);background:rgba(255,42,61,.1);display:grid;place-items:center;color:var(--red)}
+.skill h3{margin-top:.75rem;font-family:var(--font-display);font-size:1rem;color:var(--red);text-shadow:0 0 12px rgba(255,42,61,.7)}
+.skill p{margin-top:.25rem;font-size:.75rem;color:var(--muted);line-height:1.35}
+.arsenal{display:flex;flex-wrap:wrap;gap:.5rem}
+.tech{border:1px solid rgba(255,42,61,.5);background:rgba(255,42,61,.05);border-radius:9999px;padding:.4rem 1rem;font-family:var(--font-mono);font-size:.75rem;color:var(--red);box-shadow:0 0 12px -4px var(--red)}
+.cert{display:flex;align-items:center;gap:1rem;border-radius:1rem;padding:1rem}
+.cert .ico{width:3rem;height:3rem;border-radius:.75rem;border:1px solid rgba(255,42,61,.5);background:rgba(255,42,61,.1);display:grid;place-items:center;color:var(--red);flex-shrink:0}
+.cert h3{font-family:var(--font-display);color:var(--red);text-shadow:0 0 12px rgba(255,42,61,.7);font-size:1.1rem}
+.cert p{font-size:.75rem;color:var(--muted)}
+
+/* contact */
+.hero-icon{margin:0 auto;width:4rem;height:4rem;border-radius:1rem;border:1px solid rgba(255,42,61,.5);background:rgba(255,42,61,.1);display:grid;place-items:center;color:var(--red);box-shadow:0 0 30px -6px var(--red)}
+.tg-btn{display:inline-flex;width:100%;align-items:center;justify-content:center;gap:.5rem;margin-top:1.25rem;background:var(--red);color:#fff;border-radius:9999px;padding:.85rem 1.5rem;font-family:var(--font-mono);font-weight:700;font-size:.85rem;letter-spacing:.15em;box-shadow:0 0 30px -4px var(--red)}
+.personal{margin-top:1rem;display:flex;flex-direction:column;gap:.75rem}
+.personal-head{text-align:center}
+.personal-head .t{font-family:var(--font-display);font-weight:600;font-size:1.1rem;color:var(--red);text-shadow:0 0 12px rgba(255,42,61,.7);letter-spacing:.05em}
+.personal-head .s{margin-top:.25rem;font-family:var(--font-mono);font-size:11px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+.link-row{display:flex;align-items:center;gap:.75rem;border-radius:1rem;padding:.75rem}
+.link-row .ico{width:2.75rem;height:2.75rem;border-radius:.75rem;border:1px solid rgba(255,42,61,.4);background:rgba(255,42,61,.1);display:grid;place-items:center;color:var(--red);flex-shrink:0}
+.link-row .meta{flex:1;min-width:0}
+.link-row .lbl{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.link-row .val{font-family:var(--font-display);font-weight:700;font-size:1.1rem;color:var(--red);text-shadow:0 0 12px rgba(255,42,61,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.link-row .go{width:2.25rem;height:2.25rem;border-radius:.5rem;border:1px solid rgba(255,42,61,.3);display:grid;place-items:center;color:var(--red);flex-shrink:0}
+
+nav.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:1.5rem;z-index:30;width:92%;max-width:550px;}
+nav.bottom .wrap{width:100%;padding:0;}
+.navbar{display:grid;grid-template-columns:repeat(3,1fr);padding:.35rem;border-radius:1.25rem;}
+.nav-btn{position:relative;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.5rem;border-radius:1rem;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.nav-btn.active{background:rgba(255,42,61,.15);color:var(--red);box-shadow:inset 0 0 20px -4px var(--red),0 0 18px -4px var(--red)}
+.nav-btn.active::before{content:"";position:absolute;top:-4px;width:2rem;height:.25rem;border-radius:9999px;background:var(--red);box-shadow:0 0 12px var(--red)}
+.nav-btn svg{width:1.25rem;height:1.25rem}
+
+/* icons */
+.icon{width:1rem;height:1rem;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon.lg{width:1.75rem;height:1.75rem}
+.icon.md{width:1.25rem;height:1.25rem}
+
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:rgba(255,42,61,.4);border-radius:4px}
+</style>
+</head>
+<body>
+<canvas class="matrix" id="matrix" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<div class="app">
+  <header>
+    <div class="brand text-glow">𝖫Ξ𝖮 <span style="color:var(--muted); margin: 0 4px;">|</span> CYBER AUTHORITY</div>
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <div class="online text-green"><span class="dot"></span>ONLINE</div>
+      <button id="themeBtn" class="glass iconbtn ripple-host" aria-label="Toggle theme">
+        <svg id="themeIcon" class="icon" viewBox="0 0 24 24"></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="tab active" data-tab="home">
+      <div class="glass badge reveal"><span class="dot"></span>CYBER AUTHORITY</div>
+
+      <div class="pfp-wrap reveal">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+        <div class="pfp">
+          <img src="html/logox.png" alt="𝖫Ξ𝖮 Profile" />
+        </div>
+      </div>
+
+      <div class="divider reveal"></div>
+
+      <div class="typewriter reveal"><span class="red">&gt; </span><span id="tw" class="caret"></span></div>
+
+      <div class="chips reveal">
+        <span class="glass chip">Developer</span>
+        <span class="glass chip">Cyber Expert</span>
+        <span class="glass chip">Mentor</span>
+      </div>
+
+      <div class="stats reveal">
+        <div class="glass stat"><b>500+</b><i>STUDENTS</i></div>
+        <div class="glass stat"><b>3+</b><i>YEARS EXP</i></div>
+        <div class="glass stat"><b>100%</b><i>TRUST</i></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="tab" data-tab="about">
+      <div class="reveal">
+        <div class="small-tag text-green">➢ ABOUT ME 𓌹𔓎𓌺</div>
+        <h2 class="head display">Who is 𝖫Ξ𝖮?</h2>
+      </div>
+
+      <div class="glass card reveal">
+        <p style="font-size:.9rem;line-height:1.6">I'm a passionate cyber developer with a mission to educate and empower the next generation of tech minds. With expertise in development, cyber security, and mentorship — I bring attitude, knowledge, and authority.</p>
+        <div class="quote">"Code is my weapon. Knowledge is my power."</div>
+      </div>
+
+      <div class="reveal">
+        <div class="small-tag text-green">➢ CORE SKILLS &lt;/&gt;</div>
+        <div class="skills">
+         <div class="glass skill"><div class="ico ico-green"><svg class="icon md" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h3 class="text-green">Developer</h3><p>Full-stack &amp; cyber development expertise</p></div>
+<div class="glass skill"><div class="ico ico-green"><svg class="icon md" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h3 class="text-green">Study Mentor</h3><p>Personalized guidance for academic success</p></div>
+<div class="glass skill"><div class="ico ico-green"><svg class="icon md" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3 class="text-green">Guidance</h3><p>Career &amp; skill development coaching</p></div>
+<div class="glass skill"><div class="ico ico-green"><svg class="icon md" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3 class="text-green">Cyber Security</h3><p>Ethical hacking &amp; security awareness</p></div>
+
+         
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="small-tag mono text-green">➢ Tech Arsenal &gt;_</div>
+        <div class="glass card" style="margin-top:.75rem">
+          <div class="arsenal" id="arsenal"></div>
+        </div>
+      </div>
+
+      <div class="glass cert reveal border-green">
+        <div class="ico ico-green"><svg class="icon md" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></div>
+        <div>
+          <h3 class="text-green">Cyber Authority Certified</h3>
+          <p>Trusted by 500+ students across India</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="tab" data-tab="contact">
+      <div class="center reveal">
+        <div class="mono text-green" style="font-size:.75rem;letter-spacing:.4em;">— CONNECT —</div>
+        <h2 class="head display" style="font-size:2.25rem">Contact Me</h2>
+      </div>
+
+      <div class="glass card center reveal">
+        <div class="hero-icon ico-green"><svg class="icon lg" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+        <div class="display text-green" style="font-size:1.25rem;margin-top:1rem">Join My Telegram Channel</div>
+        <div class="muted" style="font-size:.75rem;margin-top:.25rem">Get exclusive cyber content, study material &amp; direct updates</div>
+        <a href="https://t.me/GhostxProtoc0l" target="_blank" rel="noreferrer" class="tg-btn ripple-host">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          JOIN TELEGRAM
+        </a>
+      </div>
+
+      <div class="reveal">
+        <div class="personal-head">
+          <div class="t text-green">Reach Out Personally</div>
+          <div class="s">Encrypted • Verified</div>
+        </div>
+        <div class="personal">
+          <a class="glass link-row ripple-host" href="https://t.me/LE0_369" target="_blank" rel="noreferrer">
+            <div class="ico"><svg class="icon md" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+            <div class="meta"><div class="lbl">Telegram DM</div><div class="val">@LE0_369</div></div>
+            <div class="go"><svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
+          </a>
+          <a class="glass link-row ripple-host" href="https://t.me/GhostxProtoc0l" target="_blank" rel="noreferrer">
+            <div class="ico"><svg class="icon md" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg></div>
+            <div class="meta"><div class="lbl">Channel</div><div class="val">GhostxProtoc0l</div></div>
+                 <div class="go"><svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="bottom">
+  <div class="wrap">
+    <div class="glass navbar">
+      <button class="nav-btn ripple-host active" data-target="home">
+        <svg class="icon md" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </button>
+      <button class="nav-btn ripple-host" data-target="about">
+        <svg class="icon md" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        About
+      </button>
+      <button class="nav-btn ripple-host" data-target="contact">
+             <svg class="icon md" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Contact
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script>
+/* icons for theme */
+const SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+const MOON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+function renderThemeIcon(){
+  const dark=document.documentElement.classList.contains('dark');
+  document.getElementById('themeIcon').innerHTML = dark?MOON:SUN;
+}
+renderThemeIcon();
+/* theme */
+(function(){
+  const saved=localStorage.getItem('leo-theme');
+  if(saved==='light'){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light')}
+  renderThemeIcon();
+})();
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const html=document.documentElement;
+  const dark=html.classList.toggle('dark'); html.classList.toggle('light',!dark);
+  localStorage.setItem('leo-theme',dark?'dark':'light'); renderThemeIcon();
+});
+/* ripple */
+document.addEventListener('click',e=>{
+  const host=e.target.closest('.ripple-host'); if(!host) return;
+  const r=host.getBoundingClientRect(); const s=Math.max(r.width,r.height);
+  const sp=document.createElement('span'); sp.className='ripple';
+  sp.style.width=sp.style.height=s+'px';
+  sp.style.left=(e.clientX-r.left-s/2)+'px'; sp.style.top=(e.clientY-r.top-s/2)+'px';
+  host.appendChild(sp); setTimeout(()=>sp.remove(),650);
+});
+
+/* Uplift and glow effect on tap */
+document.addEventListener('pointerdown',e=>{
+  const el=e.target.closest('button, a, .chip, .tech, .stat, .skill, .link-row, .nav-btn, .tg-btn, .iconbtn');
+  if(!el) return;
+  el.classList.remove('alive'); void el.offsetWidth; el.classList.add('alive');
+  setTimeout(()=>el.classList.remove('alive'),600);
+});
+
+/* Intersection Observer for Scroll Reveal */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: "0px 0px -20px 0px" });
+
+function initReveals() {
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.classList.remove('visible');
+    observer.unobserve(el);
+  });
+  // Slight delay to allow tab display:block to render before observing
+  setTimeout(() => {
+    document.querySelectorAll('.tab.active .reveal').forEach(el => observer.observe(el));
+  }, 50);
+}
+
+/* tabs */
+document.querySelectorAll('.nav-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const t=b.dataset.target;
+    document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('active',s.dataset.tab===t));
+    initReveals(); // Trigger reveals for the new tab
+  });
+});
+
+/* arsenal */
+const arsenal=["Python","JavaScript","React","Linux","Kali","Node.js","Git","SQL","HTML","CSS"];
+document.getElementById('arsenal').innerHTML=arsenal.map(t=>`<span class="tech text-green">${t}</span>`).join('');
+
+/* typewriter */
+(function(){
+  const lines=["I'm not a user, I'm a developer.","𝖫Ξ𝖮 Cyber Authority 𓌵"];
+  const el=document.getElementById('tw'); let i=0,j=0,del=false;
+  function tick(){
+    const full=lines[i%lines.length];
+    if(!del){ if(j<full.length){j++;el.textContent=full.slice(0,j);setTimeout(tick,55);} else setTimeout(()=>{del=true;tick();},1600); }
+    else { if(j>0){j--;el.textContent=full.slice(0,j);setTimeout(tick,30);} else{del=false;i++;setTimeout(tick,300);} }
+  }
+  tick();
+})();
+
+/* matrix rain */
+(function(){
+  const c=document.getElementById('matrix'); const ctx=c.getContext('2d');
+  const chars="アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789$#{}[]<>/*+=".split('');
+  const fs=14; let cols=0,drops=[];
+  function resize(){
+    c.width=innerWidth*devicePixelRatio; c.height=innerHeight*devicePixelRatio;
+    c.style.width=innerWidth+'px'; c.style.height=innerHeight+'px';
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(devicePixelRatio,devicePixelRatio);
+    cols=Math.ceil(innerWidth/fs); drops=Array(cols).fill(0).map(()=>Math.random()*-50);
+  }
+  resize(); addEventListener('resize',resize);
+  let last=0;
+  function draw(t){
+    if(t-last>55){ last=t;
+      ctx.fillStyle='rgba(6,2,2,0.12)'; ctx.fillRect(0,0,innerWidth,innerHeight);
+      ctx.font=fs+'px "JetBrains Mono", monospace';
+      for(let i=0;i<cols;i++){
+        const ch=chars[Math.floor(Math.random()*chars.length)];
+        const x=i*fs, y=drops[i]*fs;
+        const g=ctx.createLinearGradient(x,y-20,x,y);
+        g.addColorStop(0,'rgba(255,60,80,0)'); g.addColorStop(1,'rgba(255,70,90,0.85)');
+        ctx.fillStyle=g; ctx.fillText(ch,x,y);
+        if(y>innerHeight && Math.random()>.975) drops[i]=0;
+        drops[i]++;
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// Trigger initial reveals on load
+initReveals();
+</script>
+</body>
+</html>
