@@ -13,7 +13,8 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52' font-family='Arial' fill='%23ff2a3d'%3E𝖫%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Cinzel:wght@700;900&display=swap" />
+  
 <style>
 :root{
   --bg:#0a0505; --fg:#f5f5f5; --muted:#8a7a7a;
@@ -49,6 +50,14 @@ canvas.matrix{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;wi
   box-shadow:inset 0 0 0 1px rgba(255,42,61,.1),0 8px 32px -8px rgba(255,42,61,.35);
 }
 .text-glow{ text-shadow:0 0 12px rgba(255,42,61,.7),0 0 32px rgba(255,42,61,.4)}
+  .font-cinematic {
+  font-family: 'Cinzel', serif !important;
+  color: var(--red) !important;
+  text-shadow: 3px 3px 0px #000, 4px 4px 5px rgba(0,0,0,0.9), 0 0 15px rgba(255, 42, 61, 0.5) !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  }
+  
 .red{color:var(--red)}
 
   
@@ -202,7 +211,9 @@ nav.bottom .wrap{width:100%;padding:0;}
 
 <div class="app">
   <header>
-    <div class="brand text-glow">𝖫Ξ𝖮 <span style="color:var(--muted); margin: 0 4px;">|</span> CYBER AUTHORITY</div>
+    
+    <div class="brand">𝖫Ξ𝖮 <span style="color:var(--muted); margin: 0 4px; font-family:var(--font-mono);">|</span> <span class="font-cinematic">CYBER AUTHORITY</span></div>
+    
     <div style="display:flex;align-items:center;gap:.75rem">
       <div class="online text-green"><span class="dot"></span>ONLINE</div>
       <button id="themeBtn" class="glass iconbtn ripple-host" aria-label="Toggle theme">
@@ -246,7 +257,9 @@ nav.bottom .wrap{width:100%;padding:0;}
     <section class="tab" data-tab="about">
       <div class="reveal">
         <div class="small-tag text-green">➢ ABOUT ME 𓌹𔓎𓌺</div>
-        <h2 class="head display">Who is 𝖫Ξ𝖮?</h2>
+      
+        <h2 class="font-cinematic" style="font-size:1.875rem; margin-top: .25rem;">Who is 𝖫Ξ𝖮?</h2>
+        
       </div>
 
       <div class="glass card reveal">
@@ -286,7 +299,9 @@ nav.bottom .wrap{width:100%;padding:0;}
     <section class="tab" data-tab="contact">
       <div class="center reveal">
         <div class="mono text-green" style="font-size:.75rem;letter-spacing:.4em;">— CONNECT —</div>
-        <h2 class="head display" style="font-size:2.25rem">Contact Me</h2>
+      
+        <h2 class="font-cinematic" style="font-size:2.25rem">Contact Me</h2>
+        
       </div>
 
       <div class="glass card center reveal">
@@ -437,6 +452,14 @@ document.getElementById('arsenal').innerHTML=arsenal.map(t=>`<span class="tech t
     cols=Math.ceil(innerWidth/fs); drops=Array(cols).fill(0).map(()=>Math.random()*-50);
   }
   resize(); addEventListener('resize',resize);
+    document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      last = performance.now();
+      ctx.fillStyle='#0a0505';
+      ctx.fillRect(0,0,innerWidth,innerHeight);
+    }
+  });
+  
   let last=0;
   function draw(t){
     if(t-last>55){ last=t;
